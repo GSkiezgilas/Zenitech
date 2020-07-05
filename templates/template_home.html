@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Home Task</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        color: #333333;
+      }
+
+      .main-container {
+        background: #c9c7c7;
+        padding: 30px 0;
+      }
+
+      .header {
+        margin: 0 0 30px 0;
+        text-align: center;
+      }
+
+      .btn-container {
+        text-align: center;
+      }
+
+      .btn {
+        margin: 0 10px 10px 0;
+        padding: 5px 15px;
+        font-size: 1em;
+        background: #a6a6a6;
+        cursor: pointer;
+        box-shadow: 5px 5px 10px rgba(1, 1, 1, 0.3);
+        border-radius: 3px;
+      }
+
+      .btn:hover {
+        color: #fbfb50;
+        border: 2px solid #fbfb50;
+        transition: 0.7s;
+      }
+
+      .card {
+        display: flex;
+        align-items: center;
+        width: 60%;
+        margin: 30px auto;
+        padding: 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .card::before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1vw;
+        bottom: 1vw;
+        transform: skewY(-5deg);
+        background-image: linear-gradient(270deg, #fbfb50, #fbfb50 35%, #a6a6a6 35%);
+        overflow: hidden;
+        z-index: -1;
+        box-shadow: 15px 15px 20px rgba(1, 1, 1, 0.3);
+      }
+
+      .card__image-container {
+        width: 40vw;
+      }
+
+      .card__image {
+        max-width: 300px;
+        max-height: 200px;
+        margin: 0 auto;
+        display: block;
+      }
+
+      .card__image-author {
+        padding: 0 0 0 10px;
+        width: 20vw;
+        font-size: 1.5em;
+      }
+
+      .footer {
+        background-color: #a6a6a6;
+        text-align: center;
+        padding: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main-container">
+      <h1 class="header">JavaScript Home task</h1>
+      <div class="btn-container">
+        <button class="btn" onclick="sort()">Sort</button>
+      </div>
+      <div class="cards-container">
+        {%CARDS%}
+      </div>
+    </main>
+    <footer class="footer">
+      <address>
+        Giedrius Skiezgilas<br />El.paštas:
+        <a href="mailto:giedriusskiezgilas@yahoo.com">giedriusskiezgilas@yahoo.com</a>
+      </address>
+    </footer>
+
+    <script>
+      const lazyImages = document.querySelectorAll('[data-src]');
+      const lazyLoadingOptions = {
+        rootMargin: '0px 0px 220px 0px',
+      };
+      const imageObserver = new IntersectionObserver((entries, imageObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.src = entry.target.dataset.src;
+            imageObserver.unobserve(entry.target);
+          }
+        });
+      }, lazyLoadingOptions);
+
+      function sort() {
+        let i, shouldSwitch;
+        let switchcount = 0;
+        let cards = document.getElementsByClassName('card');
+        let authors = document.getElementsByClassName('card__image-author');
+        let switching = true;
+        let direction = 'ascending';
+
+        while (switching) {
+          switching = false;
+          for (i = 0; i < authors.length - 1; i++) {
+            shouldSwitch = false;
+            if (direction == 'ascending') {
+              if (authors[i].innerHTML.toLowerCase() > authors[i + 1].innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (direction == 'descending') {
+              if (authors[i].innerHTML.toLowerCase() < authors[i + 1].innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          }
+          if (shouldSwitch) {
+            cards[i].parentNode.insertBefore(cards[i + 1], cards[i]);
+            switching = true;
+            switchcount++;
+          } else if (switchcount == 0 && direction == 'ascending') {
+            direction = 'descending';
+            switching = true;
+          }
+        }
+      }
+
+      lazyImages.forEach((image) => {
+        imageObserver.observe(image);
+      });
+    </script>
+  </body>
+</html>

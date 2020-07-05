@@ -1,0 +1,14 @@
+{
+  "name": "zenitech-home-task",
+  "version": "1.0.0",
+  "description": "JavaScript home task for Zenitech",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon index.js"
+  },
+  "author": "Giedrius Skiezgilas",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
